@@ -12,6 +12,8 @@ export interface Recipe {
   plantIds?: string[];
 }
 
+
+
 export interface PlantDetails {
   traditionalUses: string[];
   scientificResearch: string[];
@@ -24,3 +26,6 @@ export interface PlantDetails {
   historicalUse: string;
   modernApplications: string[];
 }
+
+
+
