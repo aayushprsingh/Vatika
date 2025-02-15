@@ -1,0 +1,57 @@
+{
+  "plants": [
+    {
+      "id": "ashwagandha",
+      "name": "Ashwagandha",
+      "scientificName": "Withania somnifera",
+      "description": "Ashwagandha, the 'Indian Ginseng,' is a revered adaptogen from India, North Africa and the Middle East. Its root has been used for millennia to combat stress, bolster the immune system, and promote restful sleep.",
+      "uses": [
+        "Stress Relief",
+        "Sleep Aid",
+        "Immune Support",
+        "Energy Boost"
+      ],
+      "regions": [
+        "India",
+        "North Africa",
+        "Middle East"
+      ],
+      "conditions": [
+        "Anxiety",
+        "Insomnia",
+        "Stress",
+        "Fatigue"
+      ],
+      "category": [
+        "Adaptogen",
+        "Root"
+      ]
+    },
+    {
+      "id": "turmeric",
+      "name": "Turmeric",
+      "scientificName": "Curcuma longa",
+      "description": "Turmeric is a vibrant rhizome native to India and Southeast Asia. This spice isn't just for curries; its active compound, curcumin, boasts potent anti-inflammatory and antioxidant properties.",
+      "uses": [
+        "Anti-inflammatory",
+        "Antioxidant",
+        "Joint Health",
+        "Digestive Aid"
+      ],
+      "regions": [
+        "India",
+        "Southeast Asia"
+      ],
+      "conditions": [
+        "Inflammation",
+        "Joint Pain",
+        "Digestive Issues",
+        "Skin Conditions"
+      ],
+      "category": [
+        "Rhizome",
+        "Spice"
+      ]
+    }
+  ]
+}
