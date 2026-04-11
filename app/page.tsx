@@ -28,10 +28,13 @@ export default function HomePage() {
   const [showDetails, setShowDetails] = useState(false);
   const [isLoadingInsights, setIsLoadingInsights] = useState(false);
   const [insights, setInsights] = useState<PlantInsights | null>(null);
+  const [insightsError, setInsightsError] = useState<string | null>(null);
   const { dailyPlant, bookmarkedPlants, addBookmark, removeBookmark, plants } = usePlantsStore();
 
   const fetchPlantInsights = async (plant: any) => {
     setIsLoadingInsights(true);
+    setInsights(null); // Clear previous insights
+    setInsightsError(null); // Clear previous errors
     try {
       const response = await fetch('/api/plant-insights', {
         method: 'POST',
@@ -48,13 +51,21 @@ export default function HomePage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch plant insights');
+        let errorMsg = 'Failed to fetch plant insights.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) {
+          // Ignore if error response is not JSON
+        }
+        throw new Error(errorMsg);
       }
 
       const data = await response.json();
       setInsights(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching plant insights:', error);
+      setInsightsError(error.message || 'An unexpected error occurred.');
     } finally {
       setIsLoadingInsights(false);
     }
@@ -254,6 +265,11 @@ export default function HomePage() {
                             <div className="flex items-center justify-center p-8">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                             </div>
+                          ) : insightsError ? (
+                            <div className="text-red-500 p-4 bg-red-100 dark:bg-red-900/30 rounded-md">
+                              <p className="font-semibold">Error Loading Insights:</p>
+                              <p>{insightsError}</p>
+                            </div>
                           ) : insights ? (
                             <>
                               <div>
@@ -267,32 +283,46 @@ export default function HomePage() {
                             </>
                           ) : (
                             <p className="text-muted-foreground text-center py-8">
-                              Failed to load research insights. Please try again later.
+                              No insights available for this plant.
                             </p>
                           )}
                         </TabsContent>
 
                         <TabsContent value="safety" className="space-y-4 mt-4">
-                          <div className="bg-yellow-100 dark:bg-yellow-900/20 p-4 rounded-lg">
-                            <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200 mb-2">
-                              <AlertTriangle className="h-5 w-5" />
-                              <h4 className="text-lg font-semibold">Safety Considerations</h4>
+                          {isLoadingInsights ? (
+                            <div className="flex items-center justify-center p-4">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-800 dark:border-yellow-200"></div>
                             </div>
-                            {isLoadingInsights ? (
-                              <div className="flex items-center justify-center p-4">
-                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-800 dark:border-yellow-200"></div>
+                          ) : insightsError ? (
+                            <div className="text-red-500 p-4 bg-red-100 dark:bg-red-900/30 rounded-md">
+                              <p className="font-semibold">Error Loading Safety Information:</p>
+                              <p>{insightsError}</p>
+                            </div>
+                          ) : insights?.safetyConsiderations ? (
+                            <div className="bg-yellow-100 dark:bg-yellow-900/20 p-4 rounded-lg">
+                              <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200 mb-2">
+                                <AlertTriangle className="h-5 w-5" />
+                                <h4 className="text-lg font-semibold">Safety Considerations</h4>
                               </div>
-                            ) : insights ? (
                               <p className="text-yellow-800/80 dark:text-yellow-200/80">
                                 {insights.safetyConsiderations}
                               </p>
-                            ) : (
-                              <p className="text-yellow-800/80 dark:text-yellow-200/80">
-                                Always consult with a qualified healthcare practitioner before using any medicinal plants. 
-                                Some plants may interact with medications or have contraindications for certain conditions.
+                            </div>
+                          ) : (
+                             <p className="text-muted-foreground text-center py-8">
+                                No specific safety information available. Always consult with a qualified healthcare practitioner.
                               </p>
-                            )}
-                          </div>
+                          )}
+                          {/* Keep the general safety advice as a fallback if insights don't load or don't contain safety info and no error occurred */}
+                          {(!insightsError && !insights?.safetyConsiderations) && (
+                            <div className="mt-4 bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg">
+                                <h4 className="text-lg font-semibold mb-2 text-blue-800 dark:text-blue-200">General Advice</h4>
+                                <p className="text-blue-800/80 dark:text-blue-200/80">
+                                    Always consult with a qualified healthcare practitioner before using any medicinal plants.
+                                    Some plants may interact with medications or have contraindications for certain conditions.
+                                </p>
+                            </div>
+                          )}
                           <div className="mt-4">
                             <h4 className="text-lg font-semibold mb-2">Recommended Usage</h4>
                             <p className="text-muted-foreground">

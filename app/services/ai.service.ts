@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-console.log('OpenAI API Key:', process.env.OPENAI_API_KEY);
+// console.log('OpenAI API Key:', process.env.OPENAI_API_KEY); // Commented out for security
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -103,24 +103,6 @@ export async function generatePlantContent(prompt: string) {
   } catch (error) {
     return await generateWithGemini(prompt);
   }
-}
-
-export async function getPlantDetails(plantName: string, scientificName: string) {
-  const prompt = `Please provide detailed information about ${plantName} (${scientificName}) in this exact JSON format:
-  {
-    "traditionalUses": ["use1", "use2"],
-    "scientificResearch": ["finding1", "finding2"],
-    "preparation": {
-      "methods": ["method1", "method2"],
-      "dosage": "dosage information",
-      "precautions": ["precaution1", "precaution2"]
-    },
-    "interactions": ["interaction1", "interaction2"],
-    "historicalUse": "brief history",
-    "modernApplications": ["application1", "application2"]
-  }`;
-
-  return generateWithOpenAI(prompt);
 }
 
 export async function getPlantRecipe(plantName: string, scientificName: string) {

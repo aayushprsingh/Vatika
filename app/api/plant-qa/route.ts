@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Add this at the top of the file to debug
-console.log('API Keys:', {
-  openai: process.env.OPENAI_API_KEY?.slice(0, 10) + '...',
-  gemini: process.env.GEMINI_API_KEY?.slice(0, 10) + '...'
-});
+// console.log('API Keys:', { // Commented out for security
+//   openai: process.env.OPENAI_API_KEY?.slice(0, 10) + '...',
+//   gemini: process.env.GEMINI_API_KEY?.slice(0, 10) + '...'
+// });
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
