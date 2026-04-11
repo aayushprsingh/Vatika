@@ -42,18 +42,16 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase();
 
-    const savedRecipes = await Promise.all(
-      recipes.map(recipe => 
-        Recipe.create({
-          userId,
-          ...recipe,
-          symptoms,
-          conditions,
-          allergies,
-          preferences
-        })
-      )
-    );
+    const recipesToSave = recipes.map(recipe => ({
+      userId,
+      ...recipe,
+      symptoms,
+      conditions,
+      allergies,
+      preferences
+    }));
+
+    const savedRecipes = await Recipe.insertMany(recipesToSave);
 
     return NextResponse.json({ recipes: savedRecipes });
   } catch (error: any) {
