@@ -5,15 +5,17 @@ const TREFLE_TOKEN = process.env.TREFLE_API_TOKEN;
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     if (!TREFLE_TOKEN) {
       throw new Error('Trefle API token not found in environment variables');
     }
 
     const response = await fetch(
-      `${TREFLE_API_URL}/species/${params.id}?token=${TREFLE_TOKEN}`,
+      `${TREFLE_API_URL}/species/${id}?token=${TREFLE_TOKEN}`,
       {
         headers: {
           'Content-Type': 'application/json',
