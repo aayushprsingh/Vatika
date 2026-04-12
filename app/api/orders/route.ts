@@ -13,8 +13,8 @@ export async function GET(request: Request) {
       );
     }
 
-    const db = await connectToDatabase();
-    const orders = await db.collection('orders')
+    const conn = (await connectToDatabase())!;
+    const orders = await conn.connection.db!.collection('orders')
       .find({ user_id: userId })
       .sort({ created_at: -1 })
       .toArray();
@@ -40,8 +40,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const db = await connectToDatabase();
-    const result = await db.collection('orders').insertOne({
+    const conn = (await connectToDatabase())!;
+    const result = await conn.connection.db!.collection('orders').insertOne({
       user_id: userId,
       items,
       total_amount: totalAmount,

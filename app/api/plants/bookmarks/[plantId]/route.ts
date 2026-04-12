@@ -4,10 +4,10 @@ import { Plant } from '@/models/Plant';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { plantId: string } }
+  { params }: { params: Promise<{ plantId: string }> }
 ) {
   try {
-    const { plantId } = params;
+    const { plantId } = await params;
     const { userId } = await request.json();
 
     if (!userId) {
