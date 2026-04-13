@@ -1,19 +1,30 @@
 import OpenAI from 'openai';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// console.log('OpenAI API Key:', process.env.OPENAI_API_KEY); // Commented out for security
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is missing');
+  }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: false // Only use this if you're handling the API key securely
-});
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    dangerouslyAllowBrowser: false
+  });
+}
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+function getGeminiClient() {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is missing');
+  }
+
+  return new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+}
 
 export async function generateWithOpenAI(prompt: string) {
   try {
     console.log('Attempting OpenAI generation with prompt:', prompt);
 
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
@@ -51,6 +62,7 @@ export async function generateWithGemini(prompt: string) {
   try {
     console.log('Attempting Gemini generation with prompt:', prompt);
     
+    const genAI = getGeminiClient();
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const enhancedPrompt = `You are a knowledgeable herbalist. Generate exactly one medicinal recipe as a JSON object without any additional text. The response must be valid JSON that can be parsed. Use this exact format:
 {
