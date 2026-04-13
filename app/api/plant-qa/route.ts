@@ -7,11 +7,23 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 //   gemini: process.env.GEMINI_API_KEY?.slice(0, 10) + '...'
 // });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-});
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is missing');
+  }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
+
+function getGeminiClient() {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is missing');
+  }
+
+  return new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+}
 
 const getSampleResponse = (plantName: string, scientificName: string, question: string) => {
   // Create more specific sample responses based on common question types
@@ -196,6 +208,7 @@ Focus on being precise and practical. Provide exact measurements and clear instr
 
     let response;
     try {
+      const openai = getOpenAIClient();
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -215,6 +228,7 @@ Focus on being precise and practical. Provide exact measurements and clear instr
     } catch (openaiError) {
       console.error('OpenAI error:', openaiError);
       try {
+        const genAI = getGeminiClient();
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const result = await model.generateContent(prompt);
         const text = result.response.text();
