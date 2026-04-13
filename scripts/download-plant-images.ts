@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { IncomingMessage } = require('http');
 
 const PLANT_IMAGES: Record<string, string> = {
   'ashwagandha': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Withania_somnifera_-_Kerala_02.jpg/800px-Withania_somnifera_-_Kerala_02.jpg',
@@ -18,7 +17,7 @@ const PLANT_IMAGES: Record<string, string> = {
 
 async function downloadImage(url: string, filepath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    https.get(url, (response: IncomingMessage) => {
+    https.get(url, (response: any) => {
       if (response.statusCode === 200) {
         response.pipe(fs.createWriteStream(filepath))
           .on('error', reject)

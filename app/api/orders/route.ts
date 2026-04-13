@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 
@@ -13,9 +14,10 @@ export async function GET(request: Request) {
       );
     }
 
-    const conn = await connectToDatabase();
-    if (!conn || !conn.connection.db) throw new Error('Failed to connect to database');
-    const orders = await conn.connection.db.collection('orders')
+    await connectToDatabase();
+    const db = mongoose.connection?.db;
+    if (!db) throw new Error('Failed to connect to database');
+    const orders = await db.collection('orders')
       .find({ user_id: userId })
       .sort({ created_at: -1 })
       .toArray();
@@ -41,9 +43,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const conn = await connectToDatabase();
-    if (!conn || !conn.connection.db) throw new Error('Failed to connect to database');
-    const result = await conn.connection.db.collection('orders').insertOne({
+    await connectToDatabase();
+    const db = mongoose.connection?.db;
+    if (!db) throw new Error('Failed to connect to database');
+    const result = await db.collection('orders').insertOne({
       user_id: userId,
       items,
       total_amount: totalAmount,

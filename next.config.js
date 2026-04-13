@@ -21,10 +21,8 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.resolve.symlinks = false;
-    return config;
-  },
+  // Next 16 defaults to Turbopack in build/dev. Avoid a legacy webpack override
+  // that blocks Vercel builds unless a Turbopack config is also provided.
   async headers() {
     return [
       {

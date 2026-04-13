@@ -7,8 +7,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, Send, Leaf, BookOpen, Sprout } from 'lucide-react';
 import { Plant } from '@/lib/plants';
-import { searchPlantByScientificName, TreflePlantData } from '@/lib/trefle-api';
-import { getPlantImageUrl } from '@/lib/image-utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 
 interface PlantDetailsPanelProps {
@@ -55,9 +53,9 @@ export function PlantDetailsPanel({ plant, open, onOpenChange }: PlantDetailsPan
         body: JSON.stringify({
           name: plant.name,
           scientificName: plant.scientificName,
-          shortDescription: plant.shortDescription,
-          primaryUses: plant.primaryUses,
-          nativeRegions: plant.nativeRegions
+          shortDescription: plant.description,
+          primaryUses: plant.uses,
+          nativeRegions: []
         }),
       });
 
@@ -149,7 +147,7 @@ export function PlantDetailsPanel({ plant, open, onOpenChange }: PlantDetailsPan
             <div className="grid md:grid-cols-2 gap-6">
               <div className="aspect-square relative rounded-lg overflow-hidden mb-6">
                 <Image
-                  src={plant.imageUrl}
+                  src="/images/placeholder-plant.jpg"
                   alt={plant.name}
                   fill
                   className="object-cover"
@@ -158,12 +156,12 @@ export function PlantDetailsPanel({ plant, open, onOpenChange }: PlantDetailsPan
                 />
               </div>
               <div className="space-y-4">
-                <p className="text-muted-foreground">{plant.shortDescription}</p>
+                <p className="text-muted-foreground">{plant.description}</p>
                 
                 <div>
                   <h3 className="font-semibold mb-2">Primary Uses</h3>
                   <div className="flex flex-wrap gap-2">
-                    {plant.primaryUses.map((use, index) => (
+                    {plant.uses.map((use, index) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-primary/10 rounded-full text-sm"
@@ -177,7 +175,7 @@ export function PlantDetailsPanel({ plant, open, onOpenChange }: PlantDetailsPan
                 <div>
                   <h3 className="font-semibold mb-2">Native Regions</h3>
                   <div className="flex flex-wrap gap-2">
-                    {plant.nativeRegions.map((region, index) => (
+                    {[].map((region, index) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-secondary/10 rounded-full text-sm"

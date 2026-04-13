@@ -67,11 +67,9 @@ export default function PlantPage() {
         {/* Plant Header */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           <div>
-            <img 
-              src={plant.image} 
-              alt={plant.name} 
-              className="w-full h-[400px] object-cover rounded-lg"
-            />
+            <div className="w-full h-[400px] rounded-lg bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
+              <span className="text-2xl font-semibold text-emerald-900">{plant.name}</span>
+            </div>
           </div>
           
           <div>

@@ -52,11 +52,9 @@ export function SearchInput({ placeholder = "Search...", className, onSelect }: 
               }}
               className="flex items-center gap-2 cursor-pointer"
             >
-              <img 
-                src={plant.image} 
-                alt={plant.name} 
-                className="w-8 h-8 rounded-full object-cover"
-              />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center text-[10px] font-semibold text-emerald-900">
+                {plant.name.slice(0, 1)}
+              </div>
               <div>
                 <div className="font-medium">{plant.name}</div>
                 <div className="text-sm text-muted-foreground">{plant.scientificName}</div>

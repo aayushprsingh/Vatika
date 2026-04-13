@@ -3,6 +3,8 @@ import { Plant } from './plants';
 // Import environment variables
 const TREFLE_API_URL = 'https://trefle.io/api/v1';
 const TREFLE_API_KEY = process.env.TREFLE_API_KEY;
+void TREFLE_API_URL;
+void TREFLE_API_KEY;
 
 // Interface for Trefle API plant data
 export interface TreflePlantData {
@@ -18,6 +20,7 @@ export interface TreflePlantData {
   rank: string;
   observations: string;
   vegetable: boolean;
+  image_url?: string;
   distributions?: {
     native?: string[];
     introduced?: string[];
@@ -50,8 +53,15 @@ export interface EnrichedPlant extends Plant {
   author?: string;
 }
 
+export async function searchPlantByScientificName(_scientificName: string): Promise<TreflePlantData | null> {
+  return null;
+}
+
 // Function to enrich plant data with Trefle data
 export async function enrichPlantData(plantData: Plant): Promise<EnrichedPlant> {
-  // Return the plant data as is without enrichment
   return plantData;
+}
+
+export async function getTreflePlantByScientificName(scientificName: string): Promise<TreflePlantData | null> {
+  return searchPlantByScientificName(scientificName);
 }

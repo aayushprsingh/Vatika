@@ -86,9 +86,27 @@ Note: These benefits are based on traditional use and available research. Indivi
 Please consult a healthcare professional for personalized medical advice.`;
 };
 
+type PlantContextPlant = {
+  name: string;
+  scientificName?: string;
+  uses?: string[];
+  conditions?: string[];
+};
+
+type PlantQARequest = {
+  plantName?: string;
+  scientificName?: string;
+  question?: string;
+  type?: string;
+  context?: {
+    condition?: string;
+    plants?: PlantContextPlant[];
+  };
+};
+
 export async function POST(req: NextRequest) {
   try {
-    const { plantName, scientificName, question, type, context } = await req.json();
+    const { plantName, scientificName, question, type, context }: PlantQARequest = await req.json();
 
     if (!question) {
       return NextResponse.json(
@@ -102,9 +120,9 @@ export async function POST(req: NextRequest) {
       prompt = `As an expert herbalist and medical professional, provide a detailed, personalized response to help with ${context.condition}. The user asks: "${question}"
 
 Available medicinal plants and their properties:
-${context.plants.map(p => `- ${p.name} (${p.scientificName}):
-  • Primary Uses: ${p.uses.join(', ')}
-  • Traditional Applications: ${p.conditions.join(', ')}`).join('\n')}
+${(context.plants ?? []).map(p => `- ${p.name} (${p.scientificName ?? 'Unknown scientific name'}):
+  • Primary Uses: ${(p.uses ?? []).join(', ')}
+  • Traditional Applications: ${(p.conditions ?? []).join(', ')}`).join('\n')}
 
 Structure your response as follows:
 
@@ -208,8 +226,8 @@ Focus on being precise and practical. Provide exact measurements and clear instr
           ? `Specific guidance for treating ${context.condition}:
 
 1. Recommended Plants:
-${context.plants.map(p => `   - ${p.name} (${p.scientificName})
-     Uses: ${p.uses.join(', ')}`).join('\n')}
+${(context.plants ?? []).map(p => `   - ${p.name} (${p.scientificName ?? 'Unknown scientific name'})
+     Uses: ${(p.uses ?? []).join(', ')}`).join('\n')}
 
 2. General Guidelines:
    - Start with one plant at a time to monitor effects
@@ -222,7 +240,7 @@ ${context.plants.map(p => `   - ${p.name} (${p.scientificName})
    - Watch for any adverse reactions
    - Stop use if you experience side effects
    - This advice is not a substitute for professional medical care`
-          : getSampleResponse(plantName, scientificName, question);
+          : getSampleResponse(plantName ?? '', scientificName ?? '', question ?? '');
       }
     }
 

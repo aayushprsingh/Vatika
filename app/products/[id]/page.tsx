@@ -59,7 +59,7 @@ export default function ProductPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product Image/3D Viewer */}
             <div className="bg-card rounded-lg overflow-hidden shadow-lg">
-              <ProductViewer productId={product.id} fallbackImage={product.image} />
+              <ProductViewer product={product} />
             </div>
 
             {/* Product Details */}

@@ -6,7 +6,7 @@ const preloadedImages = new Set<string>();
 
 export function getPlantImageUrl(plant: Plant | EnrichedPlant): string {
   // If the plant already has an imageUrl, use it
-  if ('imageUrl' in plant && plant.imageUrl) {
+  if ('imageUrl' in plant && typeof plant.imageUrl === 'string' && plant.imageUrl) {
     return plant.imageUrl;
   }
 

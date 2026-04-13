@@ -14,6 +14,11 @@ export interface Plant {
   regions: string[];
   conditions: string[];
   category?: string[];
+  image?: string;
+  imageUrl?: string;
+  shortDescription?: string;
+  primaryUses?: string[];
+  nativeRegions?: string[];
 }
 
 interface PlantsStore {
@@ -74,7 +79,8 @@ export const usePlantsStore = create<PlantsStore>()(
         const today = new Date().toDateString();
         
         if (state.lastRotated !== today && state.plants.length > 0) {
-          const currentIndex = state.dailyPlant ? state.plants.findIndex(p => p.id === state.dailyPlant.id) : -1;
+          const currentPlantId = state.dailyPlant?.id;
+          const currentIndex = currentPlantId ? state.plants.findIndex(p => p.id === currentPlantId) : -1;
           const nextIndex = (currentIndex + 1) % state.plants.length;
           set({ 
             dailyPlant: state.plants[nextIndex],

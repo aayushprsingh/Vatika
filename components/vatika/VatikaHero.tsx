@@ -3,7 +3,7 @@ import { RecipeQuestionnaire } from '@/components/recipe-questionnaire';
 import { useState } from 'react';
 import { Navigation } from '@/components/navigation';
 import { motion } from 'framer-motion';
-import { Leaf, Sprout, Heart, Search, BookOpen, Flask } from 'lucide-react';
+import { Leaf, Sprout, Heart, Search, BookOpen, Beaker } from 'lucide-react';
 
 export function VatikaHero() {
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
@@ -12,7 +12,7 @@ export function VatikaHero() {
     { icon: Leaf, text: "Discover Medicinal Plants" },
     { icon: Heart, text: "Natural Healing" },
     { icon: Search, text: "Research-Based Information" },
-    { icon: Flask, text: "Traditional Remedies" },
+    { icon: Beaker, text: "Traditional Remedies" },
     { icon: Sprout, text: "Sustainable Practices" },
     { icon: BookOpen, text: "Educational Resources" },
   ];

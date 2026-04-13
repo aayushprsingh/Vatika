@@ -11,7 +11,7 @@ import { auth } from '@/lib/firebase';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, clearCart } = useCart();
+  const { items: cart, clearCart } = useCart();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -50,7 +50,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           userId: user.uid,
           items: cart.map(item => ({
-            product_id: item.id,
+            product_id: item.productId,
             quantity: item.quantity,
             price_at_time: item.price
           })),
@@ -97,7 +97,7 @@ export default function CheckoutPage() {
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                 <div className="space-y-4">
                   {cart.map((item) => (
-                    <div key={item.id} className="flex justify-between">
+                    <div key={item.productId} className="flex justify-between">
                       <span>{item.name} × {item.quantity}</span>
                       <span>${(item.price * item.quantity).toFixed(2)}</span>
                     </div>

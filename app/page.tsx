@@ -400,7 +400,7 @@ export default function HomePage() {
             </p>
           </div>
           <ClientOnly>
-            <VatikaPlantGrid plants={plants} />
+            <VatikaPlantGrid plants={plants} view="regions" />
           </ClientOnly>
         </div>
       </section>
