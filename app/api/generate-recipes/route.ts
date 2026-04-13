@@ -4,12 +4,23 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Recipe } from '@/models/Recipe';
 import { sampleRecipes } from '@/lib/recipe-data';
 
-// Initialize the API clients
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is missing');
+  }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
+
+function getGeminiClient() {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is missing');
+  }
+
+  return new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,6 +57,7 @@ export async function POST(req: NextRequest) {
 
     try {
       // Try OpenAI first
+      const openai = getOpenAIClient();
       const completion = await openai.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
         model: "gpt-4",
@@ -62,6 +74,7 @@ export async function POST(req: NextRequest) {
 
       try {
         // Fallback to Gemini
+        const genAI = getGeminiClient();
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const result = await model.generateContent(prompt);
         const response = await result.response;
