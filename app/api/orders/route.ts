@@ -13,8 +13,9 @@ export async function GET(request: Request) {
       );
     }
 
-    const conn = (await connectToDatabase())!;
-    const orders = await conn.connection.db!.collection('orders')
+    const conn = await connectToDatabase();
+    if (!conn || !conn.connection.db) throw new Error('Failed to connect to database');
+    const orders = await conn.connection.db.collection('orders')
       .find({ user_id: userId })
       .sort({ created_at: -1 })
       .toArray();
@@ -40,8 +41,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const conn = (await connectToDatabase())!;
-    const result = await conn.connection.db!.collection('orders').insertOne({
+    const conn = await connectToDatabase();
+    if (!conn || !conn.connection.db) throw new Error('Failed to connect to database');
+    const result = await conn.connection.db.collection('orders').insertOne({
       user_id: userId,
       items,
       total_amount: totalAmount,
